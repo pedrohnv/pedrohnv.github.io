@@ -1,17 +1,17 @@
-baseurl = "https://nb2hugo.netlify.com"
-DefaultContentLanguage = "en"
-title = "nb2hugo demo"
+baseurl = "https://comp-eletromag.netlify.com/"
+DefaultContentLanguage = "pt"
+title = "Computação & Eletromagnetismo"
 theme = "beautifulhugo"
 
 [Params]
-  subtitle = "Easily convert your Jupyter notebooks into a blog"
+  subtitle = "Usando o computador para solucionar problemas de eletromagnetismo"
   dateFormat = "January 2, 2006"
 
 [Author]
-  name = "Vincent Lunot"
-  website = "https://www.vincent-lunot.com"
-  email = "vlunot@gmail.com"
-  
+  name = "Pedro H. N. Vieira"
+  website = "https://comp-eletromag.netlify.com/"
+  email = "pedrohnv@hotmail.com"
+
 [[menu.main]]
     name = "Blog"
     url = ""
