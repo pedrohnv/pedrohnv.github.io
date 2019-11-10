@@ -1,16 +1,17 @@
 baseurl = "https://comp-eletromag.netlify.com/"
-DefaultContentLanguage = "pt"
+DefaultContentLanguage = "br"
 title = "Computação & Eletromagnetismo"
 theme = "beautifulhugo"
 
 [Params]
   subtitle = "Usando o computador para solucionar problemas de eletromagnetismo"
-  dateFormat = "January 2, 2006"
+  dateFormat = "2.1.2006"
 
 [Author]
   name = "Pedro H. N. Vieira"
   website = "https://comp-eletromag.netlify.com/"
   email = "pedrohnv@hotmail.com"
+  github = "pedrohnv"
 
 [[menu.main]]
     name = "Blog"
@@ -21,3 +22,8 @@ theme = "beautifulhugo"
     name = "Tags"
     url = "tags"
     weight = 3
+
+[[menu.main]]
+    name = "Sobre"
+    url = "about"
+    weight = 10
