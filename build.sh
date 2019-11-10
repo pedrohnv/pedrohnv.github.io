@@ -1,9 +1,6 @@
-FILES="$(find notebooks -type f -name '*.ipynb')"
+FILES="$(find notebooks -type f -name '*.ipynb' -not -path "*/.ipynb_checkpoints/*")"
 for f in $FILES
 do
-    if [ ${file: -17} != "-checkpoint.ipynb" ]
-    then
-        nb2hugo $f --site-dir base --section post
-    fi
+    nb2hugo $f --site-dir base --section post
 done
 hugo -s base
