@@ -19,6 +19,11 @@ theme = "beautifulhugo"
     weight = 1
 
 [[menu.main]]
+    name = "Notebooks"
+    url = "https://github.com/pedrohnv/pedrohnv.github.io/tree/master/notebooks"
+    weight = 2
+
+[[menu.main]]
     name = "Tags"
     url = "tags"
     weight = 3
