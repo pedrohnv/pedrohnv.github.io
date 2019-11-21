@@ -1,7 +1,10 @@
+title = "Computação & Eletromagnetismo"
 baseurl = "https://comp-eletromag.netlify.com/"
 DefaultContentLanguage = "br"
-title = "Computação & Eletromagnetismo"
 theme = "beautifulhugo"
+googleAnalytics = 'UA-153119838-1'
+pygmentsUseClasses = true
+pygmentsCodeFences = true
 
 [Params]
   subtitle = "Usando o computador para solucionar problemas de eletromagnetismo"
