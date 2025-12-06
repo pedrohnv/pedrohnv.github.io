@@ -13,14 +13,6 @@ bibliography: references.bib
     {{< fa brands github >}}
     <span style="margin-left:6px;">GitHub</span>
   </a>
-  <a href="https://orcid.org/0000-0002-3639-0851"
-     style="display:inline-flex;align-items:center;justify-content:center;
-            width:80px;height:32px;margin:0 4px;
-            border:1px solid #ccc;border-radius:4px;
-            text-decoration:none;color:inherit;vertical-align:middle;">
-    {{< fa brands orcid >}}
-    <span style="margin-left:6px;">ORCID</span>
-  </a>
   <a href="https://www.linkedin.com/in/pedro-h-n-vieira-9338a7189/"
      style="display:inline-flex;align-items:center;justify-content:center;
             width:92px;height:32px;margin:0 4px;
@@ -28,6 +20,14 @@ bibliography: references.bib
             text-decoration:none;color:inherit;vertical-align:middle;">
     {{< fa brands linkedin >}}
     <span style="margin-left:6px;">Linkedin</span>
+  </a>
+  <a href="https://orcid.org/0000-0002-3639-0851"
+     style="display:inline-flex;align-items:center;justify-content:center;
+            width:80px;height:32px;margin:0 4px;
+            border:1px solid #ccc;border-radius:4px;
+            text-decoration:none;color:inherit;vertical-align:middle;">
+    {{< fa brands orcid >}}
+    <span style="margin-left:6px;">ORCID</span>
   </a>
   <a href="https://lattes.cnpq.br/2170578643976157"
      style="display:inline-flex;align-items:center;justify-content:center;
