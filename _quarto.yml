@@ -1,0 +1,20 @@
+project:
+  type: website
+
+website:
+  title: "pedrohnv-pages"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+  repo-url: https://github.com/pedrohnv/pedrohnv.github.io
+  repo-actions: [edit, source, issue]
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    css: styles.css
+    toc: true

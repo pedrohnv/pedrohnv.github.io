@@ -1,0 +1,13 @@
+---
+title: "Notas em Ciência e Engenharia Computacional"
+lang: pt
+listing:
+  contents: posts
+  sort: "title"
+  type: table
+  categories: true
+---
+
+Bem-vindos ao exuberante mundo da [Ciência e Engenharia Computacional](about.qmd).
+
+# Posts

@@ -1,0 +1,59 @@
+---
+title: "Revisão Bibliográfica Sistematizada"
+description: "Como fazer uma Revisão Bibliográfica Sistematizada."
+author: "Pedro H. N. Vieira"
+date: "2025-12-04"
+categories:
+  - Bibliografia
+  - Tutorial
+lang: pt
+bibliography: ../references.bib
+---
+
+# Introdução
+
+Para uma pesquisa científica, é importante fazer uma revisão minuciosa da literatura existente para se estabelecer o estado da arte do conhecimento em um determinado assunto. Fazer uma pesquisa bibliográfica sem uma metodologia e sistematização pode ser contraproducente, pois pode-se ler um mesmo artigo irrelevante múltiplas vezes ou alguma informação relevante não ser devidamente registrada.
+
+# Metodologia
+
+A metodologia adotada para revisão bibliográfica nesta tese foi adaptada daquela presente no livro [@Foster2017Assembling] e da diretriz PRISMA[^PRISMA] [@Page2021Prisma]. Esta metodologia parece ser muito comum nas Ciências da Saúde, mas não tanto nas engenharias. Ela consiste dos seguintes passos: Planejar, Identificar, Avaliar, Coletar, Explicar e Sumariar; explicados a seguir.
+
+[^PRISMA]: _Preferred Reporting Items for Systematic Reviews and Meta-Analyses_, itens preferíveis de relatar para revisões sistemáticas e metanálises
+
+## Planejar
+
+A primeira etapa deve ser o planejamento, no qual é estabelecida a pergunta científica a ser respondida pela revisão bibliográfica, além dos critérios de inclusão e exclusão das fontes bibliográficas (artigos, teses etc).
+
+### Pergunta científica
+
+Uma revisão bibliográfica não tem serventia quando não se sabe qual é a informação que se deseja obter. Por isto, é importante estabelecer previamente qual é o conhecimento que se busca. Eis a importância de se definir uma pergunta científica a ser respondida pela revisão bibliográfica.
+
+### Critérios de inclusão e exclusão
+
+A partir da pergunta científica, definem-se os critérios de inclusão e exclusão das fontes bibliográficas, a partir dos quais elas serão rotuladas como relevantes ou não. Por exemplo: incluir na bibliografia a ser analisada somente artigos que utilizam um determinado método e excluir aqueles que não apresentam resultados experimentais; ou incluir somente estudos dos últimos dez anos. Opcionalmente, pode-se definir um critério de parada na etapa de avaliação como, por exemplo, adquirir somente o primeiro milhar de cada resultado ou que, no mínimo, 50% dos resultados tenham sido rotulados e que ao menos 1\% de todos os resultados tenham sido rotulados como relevantes. Recomenda-se determinar alguns fatores para codificar os estudos como, por exemplo, metodologia adotada em cada, para permitir uma metanálise.
+
+Se estes critérios resultarem numa bibliografia muito extensa, é um sinal de que a pergunta científica está muito ampla e recomenda-se dividi-la em múltiplas perguntas, cada qual com a sua própria revisão bibliográfica. Se, caso contrário, a bibliografia ficar muito pequena, pode ser um sinal de que a pergunta está específica demais.
+
+## Identificar
+
+Na etapa de identificação, uma pesquisa preliminar é feita com o objetivo de encontrar revisões bibliográficas já publicadas, as bases de dados (e.g. _IEEE Xplore_, Scopus, Portal de Periódicos CAPES, etc) relevantes nos quais buscar a literatura e os termos de busca (_query strings_) a serem usados. É, também, neste passo que alguns estudos são selecionados como conhecimento prévio, sendo rotulados como relevantes ou irrelevantes, antes de se fazer uma busca mais exaustiva. Este conhecimento prévio é usado para verificar se os critérios de inclusão e exclusão estão adequados. Se julgado necessário, o plano é revisado.
+
+## Avaliar
+
+Nesta etapa, o plano definido previamente é executado. Uma busca exaustiva em cada base de dados é feita para cada termo de busca e o número de itens adquiridos por cada termo é anotado, assim como a data na qual a busca foi realizada. Os resultados são mesclados e os registros duplicados são excluídos. Então, a triagem completa e classificação como relevante ou não dos itens é feita ao se avaliar somente o título e resumo de cada um até que se atinja o critério de parada, se houver. Os textos completos só serão adquiridos e lidos na próxima etapa.  É útil utilizar uma ferramenta de gestão de referências para isto, tais como _EndNote, JabRef, Mendeley, Zotero etc_.
+
+Para ajudar na triagem, pode-se recorrer a um programa de computador tal como o [ASReview](https://asreview.nl/), o qual usa aprendizado de máquina ativo para rearranjar os registros não rotulados e mostra o próximo item com a maior probabilidade de ser rotulado como relevante [@asreview;@Schoot2021Open]. Esse programa não faz as rotulações, sendo esta responsabilidade inteiramente do usuário. Ele apenas reorganiza a lista de registros a serem triados. Recomenda-se que a triagem seja feita de forma independente por, pelo menos, três pessoas para que se tenha mais robustez na revisão bibliográfica.
+
+## Coletar
+
+Após a avaliação, os textos completos dos registros classificados como relevantes são adquiridos e lidos, codificando-os em uma tabela de acordo com o fatores determinados no planejamento para poder sintetiza-los.
+
+## Explicar
+
+A metanálise é feita nesta etapa e os resultados são contextualizados e sintetizados. Então, é discutido como os estudos revisados respondem à pergunta científica.
+
+## Sumariar
+
+Na etapa final, a revisão é escrita propriamente. Ela deve providenciar uma visão geral das diretrizes adotadas para que outros pesquisadores possam reproduzir os passos da revisão e replicar os resultados.
+
+# Referências
