@@ -200,12 +200,12 @@ $$
 \omega_n = (-1)^{n+1} \frac{e^{-nq\zeta}}{\xi_n^\alpha}.
 $$
 
-Os pontos $\xi_n$ podem ser substituídos pelos pontos de interpolação $x_n$ com fator de deslocamento $\beta = b / q$. Usando as duas expressões acima para computar o [limite $\lambda$](#lambda), obtendo-se $\lambda = -e^{-q\zeta}$, o que indica que a sequência $\{S_n\}$ é alternada e linearmente convergente, portanto todos os métodos do tipo Levin e o algorítimo de Shanks-Wynn são aplicáveis para acelerar a convergência. Usando a estimativa do resto $\omega_n$ em fórmula fechada, deduzida acima, no algorítimo de Levin-Sidi e Mosig-Michalski, deduz-se a *variante-a* destes métodos. O parâmetro $\Omega_k$ no algorítimo de Mosig-Michalski se torna
+Os pontos $\xi_n$ podem ser substituídos pelos pontos de interpolação $x_n$ com fator de deslocamento $\beta = b / q$. Usando as duas expressões acima para computar o [limite $\lambda$](#lambda), obtendo-se $\lambda = -e^{-q\zeta}$, o que indica que a sequência $\{S_n\}$ é alternada e linearmente convergente, portanto todos os métodos do tipo Levin e o algoritimo de Shanks-Wynn são aplicáveis para acelerar a convergência. Usando a estimativa do resto $\omega_n$ em fórmula fechada, deduzida acima, no algoritimo de Levin-Sidi e Mosig-Michalski, deduz-se a *variante-a* destes métodos. O parâmetro $\Omega_k$ no algoritimo de Mosig-Michalski se torna
 $$
 \Omega_k = \frac{\omega_k}{\omega_{k-1}} = -e^{-q\zeta} \left ( \frac{x_{k-1}}{x_k} \right )^\alpha, \quad k \ge 1,
 $$
 
-sendo $\Omega_0 = 0$ e os parâmetros do algorítimo $\sigma = 0$ e $\mu = 2$.
+sendo $\Omega_0 = 0$ e os parâmetros do algoritimo $\sigma = 0$ e $\mu = 2$.
 
 Como exemplo, considere a integral
 $$
