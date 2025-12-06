@@ -9,7 +9,7 @@
 <meta name="author" content="Pedro H. N. Vieira">
 <meta name="description" content="Como resolver circuitos resistivos pela Análise Nodal Modificada.">
 
-<title>Análise Nodal Modificada – pedrohnv-pages</title>
+<title>Análise Nodal Modificada – Notas em Ciência e Engenharia Computacional</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -167,7 +167,7 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">pedrohnv-pages</span>
+    <span class="navbar-title">Notas em Ciência e Engenharia Computacional</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Procurar"></div>
@@ -304,7 +304,7 @@ Descarta-se o valor de índice 0 do vetor I</code></pre>
 <section id="código" class="level3">
 <h3 class="anchored" data-anchor-id="código">Código</h3>
 <p>Importam-se alguns módulos (bibliotecas).</p>
-<div id="efc1a19a" class="cell" data-execution_count="1">
+<div id="c39f4bca" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Código</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -314,7 +314,7 @@ Descarta-se o valor de índice 0 do vetor I</code></pre>
 </details>
 </div>
 <p>Define-se a classe de objetos <code>Elemento</code> básicos do circuito, os quais são inicializados (construídos) por <code>Elemento(no1, no2, valor, nome)</code>. O valor <code>nome</code> do elemento é opicional e será vazio se não atribuído. A partir deste <code>Elemento</code>, definem-se as classes de objetos <code>Resistor</code> e <code>Fonte_Corrente</code> que herdam todos os métodos e atributos de <code>Elemento</code> (conceitos de <a href="https://pt.wikipedia.org/wiki/Programação_orientada_a_objetos">Programação Orientada a Objetos</a>), cada qual redefine a forma que se carimbam, através do método <code>carimbar</code>, no sistema linear. Há testes <code>se, então</code> para ignorar o nó Terra (0) na construção do sistema linear.</p>
-<div id="318fd587" class="cell" data-execution_count="2">
+<div id="fcea4881" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Código</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Elemento(<span class="bu">object</span>):</span>
@@ -377,7 +377,7 @@ Descarta-se o valor de índice 0 do vetor I</code></pre>
 </details>
 </div>
 <p>A função abaixo identifica quantos nós há no circuito a partir da lista de elementos <code>netlist</code> e retorna o índice do maior nó.</p>
-<div id="d507af1b" class="cell" data-execution_count="3">
+<div id="ddc0b493" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Código</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> maior_no(netlist):</span>
@@ -424,7 +424,7 @@ Figura&nbsp;1: Circuito 1
 </div>
 </div>
 <p>Criamos a lista de elementos <code>netlist</code>, criamos uma matriz <code>Y</code> e um vetor <code>I</code> de zeros e, então, iteramos cada elemento na <code>netlist</code> para montar o sistema linear.</p>
-<div id="edd565a0" class="cell" data-execution_count="5">
+<div id="eb9937d8" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Código</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>netlist <span class="op">=</span> [</span>
@@ -492,7 +492,7 @@ Descarta-se o valor de índice 0 do vetor I</code></pre>
 <section id="código-1" class="level3">
 <h3 class="anchored" data-anchor-id="código-1">Código</h3>
 <p>Definimos a seguir a classe de objetos <code>Fonte_Tensao</code>. É necessário, para montar o sistema linear, dar um índice único a cada fonte de tensão.</p>
-<div id="d172377c" class="cell" data-execution_count="6">
+<div id="154b98dd" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Código</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Fonte_Tensao(Elemento):</span>
@@ -553,7 +553,7 @@ Figura&nbsp;2: Circuito 2
 </div>
 </div>
 </div>
-<div id="079c90b9" class="cell" data-execution_count="8">
+<div id="f52f23d7" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Código</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>netlist <span class="op">=</span> [</span>

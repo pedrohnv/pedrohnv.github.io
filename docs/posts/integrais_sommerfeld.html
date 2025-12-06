@@ -9,7 +9,7 @@
 <meta name="author" content="Pedro H. N. Vieira">
 <meta name="description" content="Integração numérica para calcular integrais de Sommerfeld.">
 
-<title>Computando Integrais de Sommerfeld – pedrohnv-pages</title>
+<title>Computando Integrais de Sommerfeld – Notas em Ciência e Engenharia Computacional</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -170,7 +170,7 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">pedrohnv-pages</span>
+    <span class="navbar-title">Notas em Ciência e Engenharia Computacional</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Procurar"></div>
@@ -390,10 +390,10 @@ r_n \sim \omega_n \sum^\infty_{j=0} c_j \xi_n^{-j},
 <p>onde <span class="math inline">\(c_j\)</span> são <span class="math inline">\(n\)</span> coeficientes independentes e <span class="math inline">\(\omega_n\)</span> são as estimativas do resto, dadas por <span class="math display">\[
 \omega_n = (-1)^{n+1} \frac{e^{-nq\zeta}}{\xi_n^\alpha}.
 \]</span></p>
-<p>Os pontos <span class="math inline">\(\xi_n\)</span> podem ser substituídos pelos pontos de interpolação <span class="math inline">\(x_n\)</span> com fator de deslocamento <span class="math inline">\(\beta = b / q\)</span>. Usando as duas expressões acima para computar o <a href="#lambda">limite <span class="math inline">\(\lambda\)</span></a>, obtendo-se <span class="math inline">\(\lambda = -e^{-q\zeta}\)</span>, o que indica que a sequência <span class="math inline">\(\{S_n\}\)</span> é alternada e linearmente convergente, portanto todos os métodos do tipo Levin e o algorítimo de Shanks-Wynn são aplicáveis para acelerar a convergência. Usando a estimativa do resto <span class="math inline">\(\omega_n\)</span> em fórmula fechada, deduzida acima, no algorítimo de Levin-Sidi e Mosig-Michalski, deduz-se a <em>variante-a</em> destes métodos. O parâmetro <span class="math inline">\(\Omega_k\)</span> no algorítimo de Mosig-Michalski se torna <span class="math display">\[
+<p>Os pontos <span class="math inline">\(\xi_n\)</span> podem ser substituídos pelos pontos de interpolação <span class="math inline">\(x_n\)</span> com fator de deslocamento <span class="math inline">\(\beta = b / q\)</span>. Usando as duas expressões acima para computar o <a href="#lambda">limite <span class="math inline">\(\lambda\)</span></a>, obtendo-se <span class="math inline">\(\lambda = -e^{-q\zeta}\)</span>, o que indica que a sequência <span class="math inline">\(\{S_n\}\)</span> é alternada e linearmente convergente, portanto todos os métodos do tipo Levin e o algoritimo de Shanks-Wynn são aplicáveis para acelerar a convergência. Usando a estimativa do resto <span class="math inline">\(\omega_n\)</span> em fórmula fechada, deduzida acima, no algoritimo de Levin-Sidi e Mosig-Michalski, deduz-se a <em>variante-a</em> destes métodos. O parâmetro <span class="math inline">\(\Omega_k\)</span> no algoritimo de Mosig-Michalski se torna <span class="math display">\[
 \Omega_k = \frac{\omega_k}{\omega_{k-1}} = -e^{-q\zeta} \left ( \frac{x_{k-1}}{x_k} \right )^\alpha, \quad k \ge 1,
 \]</span></p>
-<p>sendo <span class="math inline">\(\Omega_0 = 0\)</span> e os parâmetros do algorítimo <span class="math inline">\(\sigma = 0\)</span> e <span class="math inline">\(\mu = 2\)</span>.</p>
+<p>sendo <span class="math inline">\(\Omega_0 = 0\)</span> e os parâmetros do algoritimo <span class="math inline">\(\sigma = 0\)</span> e <span class="math inline">\(\mu = 2\)</span>.</p>
 <p>Como exemplo, considere a integral <span class="math display">\[
 I_\nu(a,z,\rho) = \int_a^\infty e^{-\xi z} J_\nu (\xi \rho) \xi^\nu d\xi
 \]</span> <span class="math display">\[

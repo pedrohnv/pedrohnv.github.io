@@ -12,6 +12,9 @@ website:
   repo-url: https://github.com/pedrohnv/pedrohnv.github.io
   repo-actions: [edit, source, issue]
 
+execute:
+  freeze: auto
+
 format:
   html:
     theme:
