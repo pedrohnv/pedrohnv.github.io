@@ -9,7 +9,7 @@
 <meta name="author" content="Pedro H. N. Vieira">
 <meta name="description" content="Integração numérica pela quadratura tanh-sinh.">
 
-<title>Fórmulas de Exponenciais Duplas – pedrohnv-pages</title>
+<title>Fórmulas de Exponenciais Duplas – Notas em Ciência e Engenharia Computacional</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -167,7 +167,7 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">pedrohnv-pages</span>
+    <span class="navbar-title">Notas em Ciência e Engenharia Computacional</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Procurar"></div>
@@ -425,7 +425,7 @@ erro6 = 3.0485303698109525e-10
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <p>O <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.tanhsinh.html">SciPy tem uma implementação</a> deste esquema de integração numérica.</p>
-<div id="e91099fe" class="cell" data-execution_count="1">
+<div id="0c6f14fe" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy <span class="im">import</span> exp, cos, pi, inf</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.integrate <span class="im">import</span> tanhsinh</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1066,7 +1066,7 @@ Vanherck, Joren, Bart Sorée, e Wim Magnus. 2020. <span>«Tanh-sinh Quadrature f
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/pedrohnv\.github\.io\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
