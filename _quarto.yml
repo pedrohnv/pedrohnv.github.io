@@ -1,8 +1,9 @@
 project:
   type: website
+  output-dir: docs
 
 website:
-  title: "pedrohnv-pages"
+  title: "Notas em Ciência e Engenharia Computacional"
   navbar:
     left:
       - href: index.qmd

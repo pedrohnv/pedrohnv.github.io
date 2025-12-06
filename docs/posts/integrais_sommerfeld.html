@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Pedro H. N. Vieira">
+<meta name="description" content="Integração numérica para calcular integrais de Sommerfeld.">
+
+<title>Computando Integrais de Sommerfeld – pedrohnv-pages</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-e31584831b205ffbb2d98406f31c2a5b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">pedrohnv-pages</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Procurar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">Sobre</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a></li>
+  <li><a href="#aceleração-de-sequências-por-extrapolação" id="toc-aceleração-de-sequências-por-extrapolação" class="nav-link" data-scroll-target="#aceleração-de-sequências-por-extrapolação">Aceleração de Sequências por Extrapolação</a>
+  <ul class="collapse">
+  <li><a href="#o-método-das-médias-ponderadas-e-o-algorítmo-de-mosig-michalski" id="toc-o-método-das-médias-ponderadas-e-o-algorítmo-de-mosig-michalski" class="nav-link" data-scroll-target="#o-método-das-médias-ponderadas-e-o-algorítmo-de-mosig-michalski">O método das médias ponderadas e o algorítmo de Mosig-Michalski</a></li>
+  </ul></li>
+  <li><a href="#integrais-de-cauda-oscilatórias" id="toc-integrais-de-cauda-oscilatórias" class="nav-link" data-scroll-target="#integrais-de-cauda-oscilatórias">Integrais de Cauda Oscilatórias</a></li>
+  <li><a href="#código" id="toc-código" class="nav-link" data-scroll-target="#código">Código</a>
+  <ul class="collapse">
+  <li><a href="#aceleração-de-sequência" id="toc-aceleração-de-sequência" class="nav-link" data-scroll-target="#aceleração-de-sequência">Aceleração de Sequência</a></li>
+  <li><a href="#partição-extrapolação" id="toc-partição-extrapolação" class="nav-link" data-scroll-target="#partição-extrapolação">Partição-Extrapolação</a></li>
+  <li><a href="#teste" id="toc-teste" class="nav-link" data-scroll-target="#teste">Teste</a></li>
+  </ul></li>
+  <li><a href="#conclusão" id="toc-conclusão" class="nav-link" data-scroll-target="#conclusão">Conclusão</a></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">Referências</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/pedrohnv/pedrohnv.github.io/edit/main/posts/integrais_sommerfeld.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/pedrohnv/pedrohnv.github.io/blob/main/posts/integrais_sommerfeld.qmd" class="toc-action"><i class="bi empty"></i>Ver o código fonte</a></li><li><a href="https://github.com/pedrohnv/pedrohnv.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Computando Integrais de Sommerfeld</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">integração numérica</div>
+    <div class="quarto-category">julia</div>
+    <div class="quarto-category">Integral de Sommerfeld</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Integração numérica para calcular integrais de Sommerfeld.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Autor</div>
+    <div class="quarto-title-meta-contents">
+             <p>Pedro H. N. Vieira </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Data de Publicação</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">5 de dezembro de 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introdução" class="level2">
+<h2 class="anchored" data-anchor-id="introdução">Introdução</h2>
+<p>Em várias aplicações de eletromagnetismo, especialmente aqueles envolvendo dipolos harmônicos no tempo num plano horizontal estratificado, surgem Integrais de Sommerfeld (em <a href="https://pt.wikipedia.org/wiki/Coordenadas_cil%C3%ADndricas">coordenadas cilíndricas</a>) da forma</p>
+<p><span class="math display">\[
+\int_0^\infty \tilde G(k_\rho ; z|z') J_\nu(k_\rho \rho) k_\rho \, dk_\rho, \quad \nu=0,1,2
+\]</span></p>
+<p>onde <span class="math inline">\(\tilde G\)</span> é a <a href="https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_de_Green">função de Green</a> no domínio espectral, <span class="math inline">\(z\)</span> e <span class="math inline">\(z'\)</span> são as coordenadas verticais (perpendicular à estratificação) dos pontos de observação e da fonte, respectivamente, <span class="math inline">\(\rho\)</span> é a distância radial entre tais pontos, <span class="math inline">\(J_\nu\)</span> é <a href="https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_de_Bessel">função de Bessel</a> de primeira espécie, <span class="math inline">\(k_\rho\)</span> é o <a href="https://pt.wikipedia.org/wiki/N%C3%BAmero_de_onda">número de onda</a> da componente radial dela. Esta integral é, frequentemente, difícil de resolver por não ter solução em fórmula fechada, ser altamente oscilatória, singular e divergente. Para resolver estas integrais, revisaremos o artigo de <span class="citation" data-cites="Michalski2016Efficient">Krzysztof A. Michalski e Mosig (<a href="#ref-Michalski2016Efficient" role="doc-biblioref">2016</a>)</span>.</p>
+<p>A variável <span class="math inline">\(k_\rho\)</span> é complexa e há pontos sobre o eixo real (ou próximos dele) nos quais o integrando é singular. Portanto, faz-se a integração utilizando um caminho que evite tais pontos, como ilustrado abaixo. A altura (parte imaginária) desse caminho deve ser limitada de forma a evitar que a função de Bessel exploda (tenha valores muito elevados), pois isto pode levar a <a href="https://pt.wikipedia.org/wiki/Cancelamento_catastr%C3%B3fico">erros de cancelamento catastrófico</a>.</p>
+<div id="4" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Plots</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fu">range</span>(<span class="fl">0</span>, <span class="fl">6</span>, length<span class="op">=</span><span class="fl">100</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>xd <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> [xd <span class="op">&lt;</span> xi <span class="op">&lt;</span> <span class="cn">pi</span> <span class="op">+</span> xd ? <span class="fu">sin</span>(xi <span class="op">-</span> xd) <span class="op">:</span> <span class="fl">0</span> for xi <span class="kw">in</span> x]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y, ylims<span class="op">=</span>(<span class="op">-</span><span class="fl">0.2</span>,<span class="fl">1.1</span>), xlabel<span class="op">=</span><span class="st">"Re(kρ)"</span>, ylabel<span class="op">=</span><span class="st">"Im(kρ)"</span>, label<span class="op">=</span><span class="st">"caminho de integração"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoQAAAHMCAIAAADDNi6EAAAABmJLR0QA/wD/AP+gvaeTAAAgAElEQVR4nOzdeXwM9/8H8M/M7uaOXBJybG5JEHGHOkoEQQjqDEpRd5VvtVWqp55a1Za2SlSrVXfryOGsIo4EiboiyB1y33d2dz6/P8Zvm0ZEEruZPV7Phz82k9nZd2bX57Wf+XxmhqGUEgAAABAOK3QBAAAA+g5hDAAAIDCEMQAAgMAQxgAAAAJDGAMAAAgMYQwAACAwhDEAAIDAEMYAAAACQxgDAAAITFvDuKioSOgSAAAAVEMrw/jmzZvjx49v1lMqKyvVVIw2wt5Q4jiuurpa6Co0hUwmk8lkQlehKaqqqnC1YCU0GnWpY29oZRjLZDK5XN6sp3Acp6ZitBH2Rl3YG0qUUsSPEvZGXfhvUpc69oZWhjEAAIAuQRgDAAAIDGEMAAAgMIQxAACAwBDGAAAAAkMYAwAACAxhDAAAIDCEMQAAgMAQxgAAAAJDGAMAAAgMYQwAACAwsdAFAAAIY+PGjefOnXvSbxUKBcuyDMO0ZkkaS6FQiEQioasQmFgs3rp1q6mpqVo2ro6NAgBovqioqKFDh/r5+QldCGiH2bNnFxYWIowBAFSsZ8+egwYNEroK0A5qimEexowBAAAEhjAGAAAQGMIYAABAYAhjAAAAgSGMAQAABIYwBgDQWVevXs3Pz3/SbzMzMxMSEp5l+/fv309JSWnKmhcvXiwtLX2W11KhioqK77//Pi8vLyoqqqKiQuhyCEEYAwDosLfeeis2NvZJvz18+PBXX331LNvftm3bb7/91pQ1Fy1adOfOnSf99ujRo/v373+WSpply5YthYWF06dP//TTT42MjFrtdRuB84wBAHTWsWPHWFYjOl1xcXGNVBIfH19QUDBx4sTWKWbhwoUGBgZvvfUWpVRDriymEW8SAADUFRMT069fP1dXVw8PD77L+Pnnn3t7e7u7u3fv3v3ixYv8aiNGjFi3bl3Hjh1tbGy++OKLyMhIX19fOzu7L774gl9hzpw5Z86cIYS89dZbn3/++YABA9q1azd69GjlsdnKysqJEyc6ODj06tUrOTmZX/jjjz926NDB1dV13LhxOTk59WrLysoaOnSos7Pz4MGDMzMz+YUcx3388cc+Pj4eHh7Tpk17/Ij0uHHjrl+/TgiZP3/+119/3bNnz3bt2k2dOlUul9+4ceO777777bffevXqtXr1akJIbGxsv379PD09u3XrxtdPCNm1a5ebm5unp+eaNWt69uyZl5dHCBk+fPi6des6dOgwePDgioqKIUOGeHp6urq6hoaGlpeX80/8448/fH193dzcOnXqFBcXRwh59dVXvb29PT09g4KClIfZ//rrLz8/Pzc3t379+vGltiqqheLi4vr379+sp5SVlampGG2EvaGkUCgqKiqErkJT1NTU1NTUCF1F6xk5cuTff/9dd0lZLT2RybXyv6RSrl5h+fn5dnZ2UVFRlNKampqMjAxKaUJCglwup5T+/fffHTp04Nfs3LnztGnTZDJZWlqaqanpnDlzZDJZZmamhYVFfn4+pXTo0KERERGU0rlz5/r5+eXn58vl8qCgoO+//55S+t1331laWiYkJFBK33zzzZdffplSeuHCBXt7e/5Fly1bNnHixHrlTZw4cdWqVZTSpKQkS0vLDz/8kFIaFhY2bNiw8vJyjuNee+215cuX13tW165dY2JiKKUhISEDBgwoLS2trq729/fft28fpfSTTz5ZsWIFv2ZhYaFUKuVX/ueff6RSaWlpaVpamrW1dWJiIqX0q6++YhgmKyuLUurj4zN+/Pjq6mq5XF5TU3P37l1KqVwunzt37ieffEIpjY+Pt7W1vXXrFqW0pKQkLy+PUsr/SCnduHHjCy+8wO9za2vr6OhoSumvv/7q6elZW1tb70/w9vZOT0+n6mlCcZgaAOCR+6V0yx2ulV90qCMz3+c/t6M4ffp0586dR4wYQQgxMDBwcnIihLRv3/7HH3+8d+9eZWVlWlpaSUmJhYUFIWThwoVisdjZ2dnFxWXatGlisdjR0dHV1TUpKcnGxqbuZmfMmMEvCQwMVA7fBgUF+fj48A/ee+89QkhERERoaCj/om+88UaHDh04jlMeYaaURkZGpqamEkLc3d3Hjh3LL9+9e7efn19kZCQhxMHBYfv27Y38ybNnzzY3NyeEBAQEPD6Q/Ndff1lYWKSlpaWlpRFCTExM/vnnn6SkpICAAC8vL0LIkiVL3njjDeX6S5cuNTQ0JISIRKKKioq1a9dmZ2enp6cXFRURQv7444/Q0NBOnToRQtq0acM/xdzc/IsvvsjMzMzPz79y5QohJDo6unPnzv379+d31MqVK+/cudOlS5envHmq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">
+</div>
+</div>
+<p>Alternativamente, pode-se identificar os pontos no eixo <span class="math inline">\(\Re(k_\rho)\)</span> que tornam o integrando singular e fazer a integração em intervalos com alguma técnica capaz de lidar com singularidades nos pontos finais e iniciais como, por exemplo, a <a href="https://en.wikipedia.org/wiki/Gauss%E2%80%93Jacobi_quadrature">quadratura de Gauss-Jacobi</a> ou a <a href="../posts/formulas_exp_duplas.html">fórmula tanh-sinh de exponencial dupla (DE)</a>. Contudo, computar a cauda da integral (de <span class="math inline">\(a\)</span> até <span class="math inline">\(\infty\)</span>) é mais complicado devido à natureza oscilatória de <span class="math inline">\(\tilde G(k_\rho ; z|z')\)</span>, que tem a seguinte forma:</p>
+<p><span class="math display">\[
+\tilde G(k_\rho ; z|z') \sim \frac{e^{-k_\rho \zeta}}{k_\rho^\delta} [C + \mathcal{O}(k_\rho^{-1})], \quad k_\rho \to \infty
+\]</span></p>
+<p>onde <span class="math inline">\(C\)</span> é uma constante, <span class="math inline">\(\zeta &gt; 0\)</span> é um parâmetro relacionado a <span class="math inline">\(z\)</span> e <span class="math inline">\(z'\)</span> (por exemplo, <span class="math inline">\(\zeta = |z - z'|\)</span> em um meio homogêneo) e <span class="math inline">\(\mathcal{O}(k_\rho^{-1})\)</span> é <a href="https://pt.wikipedia.org/wiki/Grande-O">um valor assintótico</a>.</p>
+</section>
+<section id="aceleração-de-sequências-por-extrapolação" class="level2">
+<h2 class="anchored" data-anchor-id="aceleração-de-sequências-por-extrapolação">Aceleração de Sequências por Extrapolação</h2>
+<p>Para computar a cauda das integrais de Sommerfeld, é interessante acelerar a convergência de uma série da forma</p>
+<p><span class="math display">\[
+S_n = \sum_{i=0}^n u_i, \quad n\to \infty
+\]</span></p>
+<p>A sequência <span class="math inline">\(S_n\)</span> pode ser particionada como <span class="math inline">\(S_n = S + r_n\)</span>, onde <span class="math inline">\(r_n\)</span> é o erro de truncamento dela, também chamado de <em>resto</em>. Busca-se uma transformada <span class="math inline">\(\{S_n\} \to \{S_n'\}\)</span> tal que a convergência seja mais rápida, isto é,</p>
+<p><span class="math display">\[
+\frac{|r_n'|}{|r_n|} = \mathcal{O}(x_n^{-\mu}), \quad \mu &gt; 0, \quad n \to \infty
+\]</span></p>
+<p>A convergência destas séries pode ser caracterizada pelo limite <a name="lambda"></a></p>
+<p><span class="math display">\[
+\lambda = \lim_{n\to\infty} \frac{r_{n+1}}{r_n} = \lim_{n\to\infty} \frac{u_{n+1}}{u_n}
+\]</span></p>
+<ul>
+<li>Se <span class="math inline">\(|\lambda| &gt; 1\)</span>, a sequência diverge;</li>
+<li>Se <span class="math inline">\(|\lambda| = 1\)</span>, a convergência é linear;</li>
+<li>Se <span class="math inline">\(|\lambda| &lt; 1\)</span>, a convergência é logarítmica;</li>
+<li>Se <span class="math inline">\(|\lambda| = 0\)</span>, a convergência é hiperlinear;</li>
+</ul>
+<p>O procedimento de extrapolação mais geral assume que o resto tem uma expansão assintótica</p>
+<p><span class="math display">\[
+r_n \sim \sum_{j=0}^\infty c_j \, \psi_j(n), \quad n \to \infty
+\]</span></p>
+<p>onde <span class="math inline">\(c_j\)</span> são coeficientes desconhecidos e <span class="math inline">\(\psi_j(n)\)</span> são funções arbitrárias, mas conhecidas de <span class="math inline">\(n\)</span>, com a propriedade de <span class="math inline">\(\psi_{j+1}=o(\psi_j(n))\)</span>. Para muitas sequências encontradas na prática, o resto tem uma expansão do tipo Poincaré da forma</p>
+<p><span class="math display">\[
+r_n \sim \omega_n \sum_{j=0}^\infty c_j \, x_n^{-j}, \quad n \to \infty
+\]</span></p>
+<p>onde <span class="math inline">\(\omega_n\)</span> são as estimativas do resto, que proveem a informação do comportamento de <span class="math inline">\(r_n\)</span> para <span class="math inline">\(n\)</span> grande, e <span class="math inline">\(\{x_n\}\)</span> é uma sequência auxiliar de pontos de interpolação tal que <span class="math inline">\(x_{n+1}&gt;x_n\)</span>. Os melhores aceleradores de convergência são obtidos tanto numericamente, quanto analiticamente, baseados no comportamento assintótico conhecido da sequência.</p>
+<section id="o-método-das-médias-ponderadas-e-o-algorítmo-de-mosig-michalski" class="level3">
+<h3 class="anchored" data-anchor-id="o-método-das-médias-ponderadas-e-o-algorítmo-de-mosig-michalski">O método das médias ponderadas e o algorítmo de Mosig-Michalski</h3>
+<p>Usando médias ponderadas, podemos expressar a soma parcial por</p>
+<p><span class="math display">\[
+S_n' = \frac{W_n S_n + W_{n+1} S_{n+1}}{W_n + W_{n+1}},
+\]</span></p>
+<p>onde <span class="math inline">\(W_n\)</span> é o peso associado a <span class="math inline">\(S_n\)</span>. Usando o coeficiente de proporção dos pesos <span class="math inline">\(\eta_n\)</span>, esta expressão pode ser reformulada em</p>
+<p><span class="math display">\[
+\eta_n = -\frac{W_n}{W_{n+1}} \\ S_n' = \frac{S_{n+1} - \eta_n S_n}{1 - \eta_n}
+\]</span></p>
+<p>Assumindo que os restos <span class="math inline">\(r_n\)</span> tem expanssão assintótica, sabedo que</p>
+<p><span class="math display">\[
+\frac{r_n'}{r_n} = \frac{r_{n+1} / r_n - \eta_n}{1 - \eta_n},
+\]</span></p>
+<p>então</p>
+<p><span class="math display">\[
+\frac{r_{n+1}}{r_n} - \frac{\omega_{n+1}}{\omega_n}[1 + \mathcal{O}(x_n^{-2})], \quad n \to \infty,
+\]</span></p>
+<p>o que sugere escolher a proporção dos pesos como</p>
+<p><span class="math display">\[
+\eta_n = \frac{\omega_{n+1}}{\omega_n}.
+\]</span></p>
+<p>Com esta escolha de <span class="math inline">\(\eta_n\)</span>, e assumindo que o denominador das soma parcial <span class="math inline">\(S_n'\)</span> tem o comportamento assintótio <span class="math display">\[
+1 - \eta_n = \mathcal{O}(x_n^{-\sigma}), \quad n \to \infty,
+\]</span></p>
+<p>onde <span class="math inline">\(\sigma &lt; 2\)</span>. A condição</p>
+<p><span class="math display">\[
+\frac{|r_n'|}{|r_n|} = \mathcal{O}(x_n^{-\mu}, \quad \mu &gt; 0, n \to \infty
+\]</span></p>
+<p>é satisfeita para <span class="math inline">\(\mu = 2 - \sigma\)</span>. Tem-se <span class="math inline">\(\sigma=0\)</span> para todas as sequências que não tem convergência logarítmica e <span class="math inline">\(\sigma=1\)</span> neste último caso. Assim sendo, chega-se ao esquema recursivo</p>
+<p><span class="math display">\[
+S_n^{(k+1)} = \frac{S_{n+1}^{(k)} - \eta_n{(k)} S_n{(k)}}{1 - \eta_n{(k)}}, \quad n,k \ge 0,
+\]</span></p>
+<p>com valor inicial <span class="math inline">\(S_n^{(0)} = S_n\)</span> e coeficientes</p>
+<p><span class="math display">\[
+\eta_n^{(k)} = \eta_n \left ( \frac{x_n}{x_{n+1}} \right )^{\mu k} = \frac{\eta_n}{(1 + \Delta x_n / x_n)^{\mu k}} \approx \frac{\eta_n}{(1 + \mu k \Delta x_n / x_n)},
+\]</span></p>
+<p>onde a segunda expressão é assintótica para valores grandes de <span class="math inline">\(n\)</span>.</p>
+</section>
+</section>
+<section id="integrais-de-cauda-oscilatórias" class="level2">
+<h2 class="anchored" data-anchor-id="integrais-de-cauda-oscilatórias">Integrais de Cauda Oscilatórias</h2>
+<p>Para integração das caudas das integrais de Sommerfeld, combinam-se métodos de quadraturas progressivas, como a regra DE, e os métodos de extrapolação discutidos acima.</p>
+<p>Considere uma integral <span class="math inline">\(S\)</span> feita sobre o eixo real com um integrando <span class="math inline">\(f(\xi)\)</span> oscilatório, podendo ter convergência lenta ou ser divergente. Calcula-se <span class="math inline">\(S\)</span> como o limite de uma sequência de somas parciais, conforme a seguir, sendo <span class="math inline">\(\xi_{-1} = a\)</span>. Os pontos <span class="math inline">\(\xi_i\)</span> selecionados sãos os zeros de <span class="math inline">\(f(\xi)\)</span>.</p>
+<p><span class="math display">\[
+S = \int_ a^\infty f(\xi)\, d\xi = \lim_{n \to \infty} \sum_{i=0}^n \int_{\xi_{i-1}}^{\xi_i} f(\xi)\, d\xi
+\]</span></p>
+<p>Esta metodologia de particionar a integral e aplicar extrapolação à série resultante é chamada de Método de Partição-Extrapolação (PE).</p>
+<p>Primeiro, investiga-se o comportamento dos restos <span class="math inline">\(r_n\)</span> para fazer uma extrapolação eficiente.</p>
+<p><span class="math display">\[
+r_n = S_n - S = - \int_{\xi_n}^\infty f(\xi) \, d\xi
+\]</span></p>
+<p>Assumindo <span class="math inline">\(\xi &gt; b &gt; a\)</span>, expressa-se <span class="math inline">\(f(\xi) \approx g(\xi)\, p(\xi)\)</span>, onde <span class="math inline">\(g(\xi)\)</span> tem uma expanssão assintótica</p>
+<p><span class="math display">\[
+g(\xi) \sim \frac{e^{-\xi \, \zeta}}{\xi^\alpha} \sum_{j = 0}^\infty a_j \xi^{-j}, \quad \xi \to \infty,
+\]</span></p>
+<p>com o parâmetro <span class="math inline">\(\zeta \ge 0\)</span>, enquanto <span class="math inline">\(p(\xi)\)</span> é periódica com um meio período <span class="math inline">\(q\)</span> tal que</p>
+<p><span class="math display">\[
+p(\xi + q) = - p(\xi)
+\]</span></p>
+<p>Desta forma, podemos assumir pontos equidistantes <span class="math display">\[
+\xi_k = b + k q, \quad k = 0, 1, \dots,
+\]</span></p>
+<p>onde <span class="math inline">\(b\)</span> é o primeiro zero de <span class="math inline">\(p(\xi)\)</span>. A partir disto, deduz-se</p>
+<p><span class="math display">\[
+r_n \sim -(-1)^n e^{-nq\zeta} \sum^\infty_{j=0} a_j \int_b^\infty \frac{p(t) e^{-t \zeta}}{(t + nq)^{\alpha + j}} dt.
+\]</span></p>
+<p>Fazendo uma expansão em série de Taylor em <span class="math inline">\(t=b\)</span> do denominador do integrando acima, chega-se a uma expansão do tipo Poincaré <span class="math display">\[
+r_n \sim \omega_n \sum^\infty_{j=0} c_j \xi_n^{-j},
+\]</span></p>
+<p>onde <span class="math inline">\(c_j\)</span> são <span class="math inline">\(n\)</span> coeficientes independentes e <span class="math inline">\(\omega_n\)</span> são as estimativas do resto, dadas por <span class="math display">\[
+\omega_n = (-1)^{n+1} \frac{e^{-nq\zeta}}{\xi_n^\alpha}.
+\]</span></p>
+<p>Os pontos <span class="math inline">\(\xi_n\)</span> podem ser substituídos pelos pontos de interpolação <span class="math inline">\(x_n\)</span> com fator de deslocamento <span class="math inline">\(\beta = b / q\)</span>. Usando as duas expressões acima para computar o <a href="#lambda">limite <span class="math inline">\(\lambda\)</span></a>, obtendo-se <span class="math inline">\(\lambda = -e^{-q\zeta}\)</span>, o que indica que a sequência <span class="math inline">\(\{S_n\}\)</span> é alternada e linearmente convergente, portanto todos os métodos do tipo Levin e o algorítimo de Shanks-Wynn são aplicáveis para acelerar a convergência. Usando a estimativa do resto <span class="math inline">\(\omega_n\)</span> em fórmula fechada, deduzida acima, no algorítimo de Levin-Sidi e Mosig-Michalski, deduz-se a <em>variante-a</em> destes métodos. O parâmetro <span class="math inline">\(\Omega_k\)</span> no algorítimo de Mosig-Michalski se torna <span class="math display">\[
+\Omega_k = \frac{\omega_k}{\omega_{k-1}} = -e^{-q\zeta} \left ( \frac{x_{k-1}}{x_k} \right )^\alpha, \quad k \ge 1,
+\]</span></p>
+<p>sendo <span class="math inline">\(\Omega_0 = 0\)</span> e os parâmetros do algorítimo <span class="math inline">\(\sigma = 0\)</span> e <span class="math inline">\(\mu = 2\)</span>.</p>
+<p>Como exemplo, considere a integral <span class="math display">\[
+I_\nu(a,z,\rho) = \int_a^\infty e^{-\xi z} J_\nu (\xi \rho) \xi^\nu d\xi
+\]</span> <span class="math display">\[
+I_\nu(a,z,\rho) = \frac{(2 \rho)^\nu \Gamma(\nu + 1/2)}{(z^2 + \rho^2)^{\nu + 1/2} \sqrt{\pi}} - \int_0^a e^{-\xi z} J_\nu (\xi \rho) \xi^\nu d\xi.
+\]</span></p>
+<p>Para <span class="math inline">\(\nu = 0,1\)</span> e <span class="math inline">\(2\)</span>, as integrais <span class="math inline">\(I_\nu(a,z,\rho)\)</span> se assemelham à forna estática das integrais de cauda que aparecem no cômputdo de campos eletromagnéticos in meios estratificados. Com <span class="math inline">\(z=0\)</span> e <span class="math inline">\(\nu =1,2\)</span>, as integrais do lado esquerdo divergem, mas são definidas no sentido da <a href="https://pt.wikipedia.org/wiki/S%C3%A9rie_divergente#Soma_de_Abel">Soma de Abel</a> (é possível <a href="https://planetmath.org/abelsummability">redefinir o somatório como uma série de potências convergente</a>).</p>
+<p><strong>Nota:</strong> <span class="citation" data-cites="Michalski2016Efficient">Krzysztof A. Michalski e Mosig (<a href="#ref-Michalski2016Efficient" role="doc-biblioref">2016</a>)</span> apresentam a fórmula acima usando um <a href="https://pt.wikipedia.org/wiki/Duplo_fatorial">duplo fatorial</a>, válida para valores inteiros de <span class="math inline">\(\nu\)</span>. Eu escolhi apresentar a fórmula mais geral usando a <a href="https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_gama">Função Gama</a>, assim como apresentado por <span class="citation" data-cites="Gradshteyn2007Table">Gradshteyn e Ryzhik (<a href="#ref-Gradshteyn2007Table" role="doc-biblioref">2007</a>)</span> (página 1089, equação 6.623.1), válida para qualquer valor de <span class="math inline">\(\nu\)</span>.</p>
+<p>Tendo em vista a forma assintótica da função de Bessel <span class="math display">\[
+J_\nu (\xi \rho) \sim \sqrt{\frac{2}{\pi \xi \rho}} \cos(\xi \rho - \nu \pi/2 - \pi/4),\quad z\to\infty,
+\]</span></p>
+<p>a integral <span class="math inline">\(I_\nu(a,z,\rho)\)</span> se encaixa no escopo do método PE com <span class="math inline">\(\zeta=z\)</span>, <span class="math inline">\(\alpha=1/2-\nu\)</span>, e <span class="math inline">\(q=\pi/\rho\)</span>. A escolha natural de pontos de quebra <span class="math inline">\(\xi_i\)</span> para as integrais parciais são, neste caso, os zeros consecutivos de <span class="math inline">\(J_\nu (\xi \rho)\)</span> (Partição Longman). Contudo, os zeros extados da função de Bessel não tem fórmula fechada, necessitando de processos iterativos. Por isto, outras alternativas para escolher <span class="math inline">\(\xi_i\)</span> foram propostas, tal como a partição de Lyness, que usa zeros assintóticos baseados na expansão assintótica da função de Bessel.</p>
+<p>Há, também, a partição de Sidi, que usa nós equidistantes separados pelo meio período <span class="math inline">\(q\)</span>. A partição de Sidi é a mais simples, porém não confiável para certos valores de <span class="math inline">\(\rho\)</span> para os quais as somas parciais deixam de ser estritamente alternadas, o que leva a uma degradação do desempenho do método. Contudo, <span class="citation" data-cites="Michalski2016Efficient">Krzysztof A. Michalski e Mosig (<a href="#ref-Michalski2016Efficient" role="doc-biblioref">2016</a>)</span> afirmam que este problema não aparece se o limite inferior de integração <span class="math inline">\(a\)</span> for escolhido como o primeiro zero da função de Bessel que seja maior do que o <span class="math inline">\(a\)</span> original.</p>
+</section>
+<section id="código" class="level2">
+<h2 class="anchored" data-anchor-id="código">Código</h2>
+<p>O código a seguir, assim como versões em Fortran e Python, estão <a href="https://github.com/pedrohnv/sommerfeld_integrals">disponíveis no Github</a>.</p>
+<div id="6" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">SpecialFunctions</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DoubleExponentialFormulas</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="aceleração-de-sequência" class="level3">
+<h3 class="anchored" data-anchor-id="aceleração-de-sequência">Aceleração de Sequência</h3>
+<div id="8" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="st">Sequence acceleation of an infinite series by extrapolation via the Mosig–Michalski algorithm (t-transformation weighted averages).</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st"># Arguments</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="st">- partial_sums: Vector of partial sums of the sequence to be accelerated, where the n-th entry should be the partial sum up to index n.</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="st">- u: Transformation parameter controlling the extrapolation's sensitivity (1 for logarithmic convergence, 2 otherwise).</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="st"># Returns</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">- extrapolated_sum: The extrapolated sum, providing an improved estimate for the series true value beyond available terms.</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">mosig_michalski</span>(partial_sums, u <span class="op">=</span> <span class="fl">1</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    kmax <span class="op">=</span> <span class="fu">length</span>(partial_sums) <span class="op">-</span> <span class="fl">1</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    beta <span class="op">=</span> <span class="fl">1</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> (<span class="fl">0</span><span class="op">:</span>kmax) <span class="op">.+</span> beta  <span class="co"># equidistant nodes</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Transformed sequence values at each extrapolation order k</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    R <span class="op">=</span> <span class="fu">deepcopy</span>(partial_sums)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># remainder estimates</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    wk0 <span class="op">=</span> <span class="fl">1</span>  <span class="co"># w_{k-1}</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    wk1 <span class="op">=</span> <span class="fl">1</span>  <span class="co"># w_{k}</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> extrapolated_sum</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="op">=</span> <span class="fl">0</span><span class="op">:</span>(kmax)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> k <span class="op">&gt;=</span> <span class="fl">1</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>            wk1 <span class="op">=</span> partial_sums[k <span class="op">+</span> <span class="fl">1</span>] <span class="op">-</span> partial_sums[k]</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>            Gk <span class="op">=</span> wk1 <span class="op">/</span> wk0</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>            Gk <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="op">=</span> <span class="fl">1</span><span class="op">:</span>k</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>            d <span class="op">=</span> X[k <span class="op">-</span> j <span class="op">+</span> <span class="fl">2</span>] <span class="op">-</span> X[k <span class="op">-</span> j <span class="op">+</span> <span class="fl">1</span>]</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>            eta <span class="op">=</span> Gk <span class="op">/</span> (<span class="fl">1</span> <span class="op">+</span> u <span class="op">*</span> (j <span class="op">-</span> <span class="fl">1</span>) <span class="op">*</span> d <span class="op">/</span> X[k <span class="op">-</span> j <span class="op">+</span> <span class="fl">1</span>])</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>            R[k <span class="op">-</span> j <span class="op">+</span> <span class="fl">1</span>] <span class="op">=</span> (R[k <span class="op">-</span> j <span class="op">+</span> <span class="fl">2</span>] <span class="op">-</span> eta <span class="op">*</span> R[k <span class="op">-</span> j <span class="op">+</span> <span class="fl">1</span>]) <span class="op">/</span> (<span class="fl">1</span> <span class="op">-</span> eta)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>        extrapolated_sum <span class="op">=</span> R[<span class="fl">1</span>]</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>        wk0 <span class="op">=</span> wk1</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> extrapolated_sum</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Teste da extrapolação com as seguintes sequências, usando <span class="math inline">\(N=20\)</span> somas parciais.</p>
+<p><span class="math display">\[
+S_1 = \sum_{i=0}^{\infty} \frac{(-1)^{i}}{\sqrt{i + 1}} \approx 0.604898643421630
+\]</span></p>
+<p><span class="math display">\[
+S_2 = \sum_{i=0}^{\infty} \frac{(4/5)^{i+1}}{i + 1} = \ln(5)
+\]</span></p>
+<p><span class="math display">\[
+S_3 = \sum_{i=0}^{\infty} \frac{1}{(i + 1)^2} = \frac{\pi^2}{6}
+\]</span></p>
+<div id="10" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> N <span class="op">=</span> <span class="fl">20</span>, u <span class="op">=</span> <span class="fl">1</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">partial_sum</span>(n<span class="op">::</span><span class="dt">Int</span>, series_term) <span class="op">=</span> <span class="fu">cumsum</span>([<span class="fu">series_term</span>(i) for i <span class="op">=</span> <span class="fl">0</span><span class="op">:</span>(n <span class="op">-</span> <span class="fl">1</span>)])</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">series_term1</span>(i<span class="op">::</span><span class="dt">Int</span>) <span class="op">=</span> (<span class="op">-</span><span class="fl">1</span>)<span class="op">^</span>i <span class="op">/</span> <span class="fu">sqrt</span>(i <span class="op">+</span> <span class="fl">1</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    extrapolated_sum <span class="op">=</span> <span class="fu">mosig_michalski</span>(<span class="fu">partial_sum</span>(N, series_term1), u)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@show</span> <span class="fu">isapprox</span>(extrapolated_sum, <span class="fl">0.604898643421630</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">series_term2</span>(i<span class="op">::</span><span class="dt">Int</span>) <span class="op">=</span> (<span class="fl">4</span><span class="op">/</span><span class="fl">5</span>)<span class="op">^</span>(i<span class="op">+</span><span class="fl">1</span>) <span class="op">/</span> (i <span class="op">+</span> <span class="fl">1</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    extrapolated_sum <span class="op">=</span> <span class="fu">mosig_michalski</span>(<span class="fu">partial_sum</span>(N, series_term2), u)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@show</span> <span class="fu">isapprox</span>(extrapolated_sum, <span class="fu">log</span>(<span class="fl">5</span>))</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">series_term3</span>(i<span class="op">::</span><span class="dt">Int</span>) <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> (i <span class="op">+</span> <span class="fl">1</span>)<span class="op">^</span><span class="fl">2</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    extrapolated_sum <span class="op">=</span> <span class="fu">mosig_michalski</span>(<span class="fu">partial_sum</span>(N, series_term3), u)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@show</span> <span class="fu">isapprox</span>(extrapolated_sum, <span class="cn">pi</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="fl">6</span>; atol <span class="op">=</span> <span class="fl">1e-2</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>isapprox(extrapolated_sum, 0.60489864342163) = true
+isapprox(extrapolated_sum, log(5)) = true
+isapprox(extrapolated_sum, pi ^ 2 / 6; atol = 0.01) = true</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
+</div>
+</div>
+</section>
+<section id="partição-extrapolação" class="level3">
+<h3 class="anchored" data-anchor-id="partição-extrapolação">Partição-Extrapolação</h3>
+<div id="12" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">Numerical integragion of Sommerfeld integral tails with Partition-Extrapolation</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">via the Mosig-Michalski method.</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="st">The expected form of the integral is the following, where ``</span><span class="sc">\\</span><span class="st">tau`` is the</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="st">radius of the circular region that contains nonzero current, ``z`` and ``z'``</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="st">are the perpendicular distances to the medium stratification of the field</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="st">and the source, respectively, and ``</span><span class="sc">\\</span><span class="st">rho`` is the lateral distance between</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="st">those points.</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="st"># Parameters</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="st">- fun: The integrand function ``f(x)`` to be integrated over each partition subinterval.</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="st">- a: The lower limit of integration (typically the start of the tail, after any head subtraction).</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="st">- q: Partition step size; the width of each subinterval (typically matched to Bessel oscillation period or chosen for balance between cost and convergence).</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="st">- z: Tail asymptotic decay parameter (often related to physical geometry or stratification; used in remainder estimate).</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="st">- alpha: Decay exponent in analytic remainder estimate for the extrapolation transformation.</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="st">- tol: Desired relative tolerance for extrapolation stopping criterion.</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="st">- kmax: Maximum number of partitions/subintervals for extrapolation.</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="st">- u: Transformation parameter controlling the extrapolation's sensitivity (1 for logarithmic convergence, 2 otherwise).</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="st"># Returns</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="st">- val: Accelerated estimate of the semi-infinite tail integral.</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="st">- error_estimate: Estimate of extrapolation absolute error.</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">part_extrap</span>(fun<span class="op">::</span><span class="dt">Function</span>, a, q, z, alpha, tol <span class="op">=</span> <span class="fl">1e-6</span>, kmax <span class="op">=</span> <span class="fl">10</span>, u <span class="op">=</span> <span class="fl">1</span>)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> <span class="fu">zeros</span>(kmax <span class="op">+</span> <span class="fl">2</span>)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    X[<span class="fl">1</span>] <span class="op">=</span> a</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    partial_sums <span class="op">=</span> <span class="fu">zeros</span>(<span class="dt">ComplexF64</span>, kmax <span class="op">+</span> <span class="fl">2</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    partial_errors <span class="op">=</span> <span class="fu">similar</span>(partial_sums)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="op">=</span> <span class="fl">1</span> <span class="op">:</span> kmax<span class="op">+</span><span class="fl">1</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        X[k <span class="op">+</span> <span class="fl">1</span>] <span class="op">=</span> X[k] <span class="op">+</span> q</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>        i, <span class="cn">e</span> <span class="op">=</span> <span class="fu">quadde</span>(fun, X[k], X[k <span class="op">+</span> <span class="fl">1</span>])</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        partial_sums[k <span class="op">+</span> <span class="fl">1</span>] <span class="op">=</span> i <span class="op">+</span> partial_sums[k]</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>        partial_errors[k <span class="op">+</span> <span class="fl">1</span>] <span class="op">=</span> <span class="cn">e</span> <span class="op">+</span> partial_errors[k]</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>    R <span class="op">=</span> partial_sums</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> old0 <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> old1 <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> val <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> error_estimate <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="op">=</span> <span class="fl">0</span> <span class="op">:</span> kmax <span class="op">+</span> <span class="fl">1</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> k <span class="op">&gt;</span> <span class="fl">0</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>            <span class="co"># analytical remainder estimates</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>            Gk <span class="op">=</span> <span class="fu">-exp</span>(<span class="op">-</span>q <span class="op">*</span> z) <span class="op">*</span> (X[k] <span class="op">/</span> X[k <span class="op">+</span> <span class="fl">1</span>])<span class="op">^</span>alpha</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>            Gk <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Mosig-Michalski extrapolation</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="op">=</span> <span class="fl">1</span><span class="op">:</span>k</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>            d <span class="op">=</span> X[k <span class="op">-</span> j <span class="op">+</span> <span class="fl">2</span>] <span class="op">-</span> X[k <span class="op">-</span> j <span class="op">+</span> <span class="fl">1</span>]</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>            eta <span class="op">=</span> Gk <span class="op">/</span> (<span class="fl">1</span> <span class="op">+</span> u <span class="op">*</span> (j <span class="op">-</span> <span class="fl">1</span>) <span class="op">*</span> d <span class="op">/</span> X[k <span class="op">-</span> j <span class="op">+</span> <span class="fl">1</span>])</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>            R[k <span class="op">-</span> j <span class="op">+</span> <span class="fl">1</span>] <span class="op">=</span> (R[k <span class="op">-</span> j <span class="op">+</span> <span class="fl">2</span>] <span class="op">-</span> eta <span class="op">*</span> R[k <span class="op">-</span> j <span class="op">+</span> <span class="fl">1</span>]) <span class="op">/</span> (<span class="fl">1</span> <span class="op">-</span> eta)</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>        val <span class="op">=</span> R[<span class="fl">1</span>]</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>        error_estimate <span class="op">=</span> <span class="fu">max</span>(<span class="fu">abs</span>(val <span class="op">-</span> old0), <span class="fu">abs</span>(val <span class="op">-</span> old1))</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> k <span class="op">&gt;</span> <span class="fl">1</span> <span class="op">&amp;&amp;</span> <span class="fu">abs</span>(error_estimate) <span class="op">&lt;</span> tol <span class="op">*</span> <span class="fu">abs</span>(val)</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>        old0 <span class="op">=</span> old1</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>        old1 <span class="op">=</span> val</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> val, error_estimate</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="teste" class="level3">
+<h3 class="anchored" data-anchor-id="teste">Teste</h3>
+<p>Testamos com a seguinte integral:</p>
+<p><span class="math display">\[
+I = \int_{a}^{\infty} e^{-x z} \, J_\nu(x p) \, x^\nu
+\]</span></p>
+<p>com parâmetros <span class="math inline">\(\nu = 2, p = 1, z = 0, a = 5.13562\)</span></p>
+<div id="14" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">begin</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    v <span class="op">=</span> <span class="fl">2</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> <span class="fl">1</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> <span class="fl">5.13562</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> <span class="cn">pi</span> <span class="op">/</span> p</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    tol <span class="op">=</span> <span class="fl">1e-9</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    alpha <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span> <span class="op">-</span> v</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    kmax <span class="op">=</span> <span class="fl">10</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    u <span class="op">=</span> <span class="fl">2</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    fun <span class="op">=</span> x <span class="op">-&gt;</span> <span class="fu">exp</span>(<span class="op">-</span>x <span class="op">*</span> z) <span class="op">*</span> <span class="fu">besselj</span>(v, x <span class="op">*</span> p) <span class="op">*</span> x<span class="op">^</span>v</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    y1 <span class="op">=</span> (<span class="fl">2</span> <span class="op">*</span> p)<span class="op">^</span>v <span class="op">*</span> <span class="fu">gamma</span>(v <span class="op">+</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span>) <span class="op">/</span> (<span class="fu">sqrt</span>(<span class="cn">pi</span>) <span class="op">*</span> (z<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> p<span class="op">^</span><span class="fl">2</span>)<span class="op">^</span>(v <span class="op">+</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span>))</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    y2, E <span class="op">=</span> <span class="fu">quadde</span>(fun, <span class="fl">0</span>, a)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    Sn <span class="op">=</span> y1 <span class="op">-</span> y2  <span class="co"># "exact" value of the integral tail</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    val, E <span class="op">=</span> <span class="fu">part_extrap</span>(fun, a, q, z, alpha, tol, kmax, u)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@show</span> <span class="fu">abs</span>(val <span class="op">-</span> Sn) <span class="op">&lt;</span> tol</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>abs(val - Sn) &lt; tol = true</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="conclusão" class="level2">
+<h2 class="anchored" data-anchor-id="conclusão">Conclusão</h2>
+<p>Quando o interesse é computar campos nas zonas distantes (acima de algumas centenas de vezes o comprimento de onda), outros métodos, como o de <a href="https://pt.wikipedia.org/wiki/M%C3%A9todo_de_Laplace#Extens%C3%A3o_do_M%C3%A9todo_de_Laplace:_Descida_mais_%C3%ADngreme">Descida Mais Íngreme</a>, são mais apropriados do que os apresentados acima; vide <span class="citation" data-cites="Michalski1985Efficient">K. A. Michalski (<a href="#ref-Michalski1985Efficient" role="doc-biblioref">1985</a>)</span>.</p>
+</section>
+<section id="referências" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referências</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Gradshteyn2007Table" class="csl-entry" role="listitem">
+Gradshteyn, I. S., e I. M. Ryzhik. 2007. <em>Table of Integrals, Series, and Products</em>. Editado por Alan Jeffrey e Daniel Zwillinger. 7.ª ed. New York: Academic Press.
+</div>
+<div id="ref-Michalski1985Efficient" class="csl-entry" role="listitem">
+Michalski, K. A. 1985. <span>«On the Efficient Evaluation of Integrals Arising in the Sommerfeld Halfspace Problem»</span>. <em>IEE Proceedings H (Microwaves, Antennas and Propagation)</em> 132 (5): 312–18.
+</div>
+<div id="ref-Michalski2016Efficient" class="csl-entry" role="listitem">
+Michalski, Krzysztof A., e Juan R. Mosig. 2016. <span>«Efficient Computation of Sommerfeld Integral Tails – Methods and Algorithms»</span>. <em>Journal of Electromagnetic Waves and Applications</em> 30 (3): 281–317. <a href="https://doi.org/10.1080/09205071.2015.1129915">https://doi.org/10.1080/09205071.2015.1129915</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pedrohnv/pedrohnv.github.io/edit/main/posts/integrais_sommerfeld.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/pedrohnv/pedrohnv.github.io/blob/main/posts/integrais_sommerfeld.qmd" class="toc-action"><i class="bi empty"></i>Ver o código fonte</a></li><li><a href="https://github.com/pedrohnv/pedrohnv.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>
